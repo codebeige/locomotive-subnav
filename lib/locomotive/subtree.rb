@@ -1,7 +1,4 @@
-require "locomotive/subtree/version"
+require 'locomotive/steam'
 
-module Locomotive
-  module Subtree
-    # Your code goes here...
-  end
-end
+require_relative 'subtree/version'
+require_relative 'subtree/liquid/tags'
