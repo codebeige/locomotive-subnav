@@ -1,4 +1,4 @@
-# Locomotive::Subtree
+# locomotive-subnav
 
 Provide your LocomotiveCMS site with a context aware set of nested navigation
 links that represent the currently selected branch of the page. Typical use
@@ -10,7 +10,7 @@ Add a dependency to the Gemfile of *both* your Wagon site and the Locomotive
 Rails application.
 
 ```ruby
-gem 'locomotive-subtree'
+gem 'locomotive-subnav'
 ```
 
 ## Usage
@@ -73,7 +73,7 @@ git commits and tags, and push the `.gem` file to
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/codebeige/locomotive-subtree. This project is intended to
+https://github.com/codebeige/locomotive-subnav. This project is intended to
 be a safe, welcoming space for collaboration, and contributors are expected to
 adhere to the [Contributor Covenant](http://contributor-covenant.org) code of
 conduct.

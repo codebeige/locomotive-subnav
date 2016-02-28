@@ -1,5 +1,5 @@
 module Locomotive
-  module Subtree
+  module Subnav
     module Liquid
       module Tags
         class Breadcrumbs < ::Liquid::Tag

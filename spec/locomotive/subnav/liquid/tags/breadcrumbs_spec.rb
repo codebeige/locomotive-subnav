@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Locomotive::Subtree::Liquid::Tags::Breadcrumbs do
+describe Locomotive::Subnav::Liquid::Tags::Breadcrumbs do
   let(:context) { ::Liquid::Context.new }
 
   def render(source, options = {})

@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'locomotive/subtree'
+require 'locomotive/subnav'
 
 Locomotive::Steam.configure do |config|
   config.mode = :test
