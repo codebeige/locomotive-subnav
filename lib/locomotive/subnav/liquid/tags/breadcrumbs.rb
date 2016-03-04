@@ -6,10 +6,10 @@ module Locomotive
 
           def render(context)
             current_page = context.registers[:page]
-            wrapper do
-              level('current') do
+            container do
+              list do
                 attrs = page_attributes(current_page, context)
-                item 'current', attrs[:title], attrs[:path]
+                item attrs[:title], attrs[:path]
               end
             end
           end
@@ -20,19 +20,16 @@ module Locomotive
             %(\n#{markup.gsub(/^/, '  ')}\n)
           end
 
-          def wrapper
+          def container
             %(<nav class="breadcrumbs">#{indent yield}</nav>)
           end
 
-          def level(name = nil)
-            attrs = if name then %( class="#{name}") else '' end
-            %(<ul#{attrs}>#{indent yield}</ul>)
+          def list
+            %(<ol>#{indent yield}</ol>)
           end
 
-          def item(name = nil, title, path)
-            names = ['nav-item']
-            names << name if name
-            %(<li class="#{names.join ' '}"><a href="#{path}">#{title}</a></li>)
+          def item(label, path)
+            %(<li><a href="#{path}">#{label}</a></li>)
           end
 
           def page_attributes(page, context)

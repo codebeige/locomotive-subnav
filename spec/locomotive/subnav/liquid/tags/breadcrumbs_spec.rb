@@ -19,19 +19,14 @@ describe Locomotive::Subnav::Liquid::Tags::Breadcrumbs do
 
     it 'renders container' do
       rendered = render(source)
-      expect(rendered).to have_tag('nav.breadcrumbs')
-    end
-
-    it 'renders current level' do
-      rendered = render(source)
-      expect(rendered).to have_tag('nav ul.current')
+      expect(rendered).to have_tag('nav.breadcrumbs ol')
     end
 
     it 'renders item for current page' do
       allow(url_builder).to receive(:url_for).with(page) { '/prunus/avium'  }
       allow(page).to receive(:title) { 'Wild Cherry' }
       rendered = render(source)
-      expect(rendered).to have_tag('ul.current li.nav-item.current') do
+      expect(rendered).to have_tag('ol li') do
         with_tag 'a',
           with: {href: '/prunus/avium'},
           text: 'Wild Cherry'
