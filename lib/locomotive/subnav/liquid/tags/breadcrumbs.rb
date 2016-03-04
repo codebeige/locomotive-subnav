@@ -8,8 +8,10 @@ module Locomotive
             current_page = context.registers[:page]
             container do
               list do
-                attrs = page_attributes(current_page, context)
-                item attrs[:title], attrs[:path]
+                ancestors_and_self(current_page, context).map do |page|
+                  attrs = page_attributes(page, context)
+                  item attrs[:title], attrs[:path]
+                end.join "\n"
               end
             end
           end
@@ -34,7 +36,26 @@ module Locomotive
 
           def page_attributes(page, context)
             url_builder = context.registers[:services].url_builder
-            {title: page.title, path: url_builder.url_for(page)}
+            translated_page = translate_page(page, context)
+            {title: translated_page.title,
+             path: url_builder.url_for(translated_page)}
+          end
+
+          def translate_page(page, context)
+            Locomotive::Steam::Decorators::I18nDecorator.new(
+              page,
+              context.registers[:locale],
+              context.registers[:site].default_locale
+            )
+          end
+
+          def ancestors_and_self(page, context)
+            page_repository = context.registers[:services].repositories.page
+            page_repository.ancestors_of(page).select { |p| display? p }
+          end
+
+          def display?(page)
+            page.published? && page.listed? && !page.templatized?
           end
 
         ::Liquid::Template.register_tag('breadcrumbs'.freeze, Breadcrumbs)
