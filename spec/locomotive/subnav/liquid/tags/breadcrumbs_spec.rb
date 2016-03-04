@@ -6,7 +6,8 @@ describe Locomotive::Subnav::Liquid::Tags::Breadcrumbs do
     double 'Page', {title: 'Example Page',
                     published?: true,
                     listed?: true,
-                    templatized?: false}.merge(attrs)
+                    templatized?: false,
+                    depth: 0}.merge(attrs)
   end
 
   let(:page_repository) do
@@ -63,7 +64,7 @@ describe Locomotive::Subnav::Liquid::Tags::Breadcrumbs do
       expect(rendered).to have_tag('ol li', text: 'Wildkirsche')
     end
 
-    it 'renders item for all ancestor pages' do
+    it 'renders full ancestor trail' do
       allow(page).to receive(:title) { 'Wild Cherry' }
       parent = page_double(title: 'Cherries')
       parent_of_parent = page_double(title: 'Index')
@@ -92,6 +93,23 @@ describe Locomotive::Subnav::Liquid::Tags::Breadcrumbs do
       allow(page).to receive(:templatized?) { true }
       rendered = render(source)
       expect(rendered).to_not have_tag('ol li')
+    end
+  end
+
+  describe 'with level option' do
+    let(:source) { '{% breadcrumbs level: 1 %}' }
+
+    it 'renders ancestor trail only up to given level' do
+      allow(page).to receive(:depth) { 2 }
+      top_level = page_double(title: 'Top Level', depth: 1)
+      root = page_double(title: 'Index', depth: 0)
+      allow(page_repository).to receive(:ancestors_of).with(page) do
+        [root, top_level, page]
+      end
+      rendered = render(source)
+      expect(rendered).to have_tag('ol') do
+        without_tag('li', text: 'Index')
+      end
     end
   end
 end

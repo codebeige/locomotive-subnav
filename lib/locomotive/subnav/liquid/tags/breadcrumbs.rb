@@ -4,6 +4,12 @@ module Locomotive
       module Tags
         class Breadcrumbs < ::Liquid::Tag
 
+          DEFAULT_ATTRIBUTES = {level: 0}
+
+          def initialize(name, source, options)
+            @attributes = DEFAULT_ATTRIBUTES.merge(parse_attributes source)
+          end
+
           def render(context)
             current_page = context.registers[:page]
             container do
@@ -14,6 +20,10 @@ module Locomotive
                 end.join "\n"
               end
             end
+          end
+
+          def level
+            @attributes[:level].to_i
           end
 
           protected
@@ -55,10 +65,21 @@ module Locomotive
           end
 
           def display?(page)
-            page.published? && page.listed? && !page.templatized?
+            page.depth >= level &&
+            page.published? &&
+            page.listed? &&
+            !page.templatized?
           end
 
-        ::Liquid::Template.register_tag('breadcrumbs'.freeze, Breadcrumbs)
+          def parse_attributes(source)
+            {}.tap do |attributes|
+              source.scan(::Liquid::TagAttributes) do |key, value|
+                attributes[key.to_sym] = value.gsub(/['"]+/, '')
+              end
+            end
+          end
+
+          ::Liquid::Template.register_tag('breadcrumbs'.freeze, Breadcrumbs)
         end
       end
     end
