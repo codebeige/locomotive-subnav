@@ -1,18 +1,13 @@
+require_relative 'tag'
+
 module Locomotive
   module Subnav
     module Liquid
       module Tags
-        class Breadcrumbs < ::Liquid::Tag
-
-          DEFAULT_ATTRIBUTES = {level: 0}
-
-          def initialize(name, source, options)
-            @attributes = DEFAULT_ATTRIBUTES.merge(parse_attributes source)
-          end
-
+        class Breadcrumbs < Tag
           def render(context)
             current_page = context.registers[:page]
-            container do
+            container 'breadcrumbs' do
               list do
                 ancestors_and_self(current_page, context).map do |page|
                   attrs = page_attributes(page, context)
@@ -22,19 +17,7 @@ module Locomotive
             end
           end
 
-          def level
-            @attributes[:level].to_i
-          end
-
           protected
-
-          def indent(markup)
-            %(\n#{markup.gsub(/^/, '  ')}\n)
-          end
-
-          def container
-            %(<nav class="breadcrumbs">#{indent yield}</nav>)
-          end
 
           def list
             %(<ol>#{indent yield}</ol>)
@@ -70,16 +53,6 @@ module Locomotive
             page.listed? &&
             !page.templatized?
           end
-
-          def parse_attributes(source)
-            {}.tap do |attributes|
-              source.scan(::Liquid::TagAttributes) do |key, value|
-                attributes[key.to_sym] = value.gsub(/['"]+/, '')
-              end
-            end
-          end
-
-          ::Liquid::Template.register_tag('breadcrumbs'.freeze, Breadcrumbs)
         end
       end
     end
