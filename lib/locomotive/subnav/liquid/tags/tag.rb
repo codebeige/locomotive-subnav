@@ -39,8 +39,9 @@ module Locomotive
             %(<nav class="#{name}">#{indent yield}</nav>)
           end
 
-          def list
-            %(<ul>#{indent yield}</ul>)
+          def list(name = nil)
+            attrs = if name then %( class="#{name}") else '' end
+            %(<ul#{attrs}>#{indent yield}</ul>)
           end
 
           def item(name = nil, label, path)

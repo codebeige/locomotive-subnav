@@ -89,6 +89,11 @@ describe '{% subnav %}', type: :template do
     end
   end
 
-  # TODO: it 'marks current level'
+  it 'marks current level' do
+    allow(page).to receive(:title) { 'Current Level' }
+    render
+    expect(rendered).to have_tag('ul.current', text: 'Current Level')
+  end
+
   # TODO: it 'renders ancestor trail up to given level only'
 end

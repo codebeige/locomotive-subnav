@@ -20,7 +20,8 @@ module Locomotive
             return if levels.empty?
             current_level = levels.first
             rest = levels.drop(1)
-            list do
+            name = 'current' if rest.empty?
+            list(name) do
               current_level.map do |page|
                 attrs = page_attributes(page, context)
                 if selection.include? page._id
