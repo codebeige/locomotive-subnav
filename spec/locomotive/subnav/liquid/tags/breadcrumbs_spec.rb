@@ -3,6 +3,10 @@ require_relative 'navigation_examples'
 
 describe '{% breadcrumbs %}', type: :template do
 
+  before do
+    allow(page_repository).to receive(:ancestors_of) { [page] }
+  end
+
   include_examples 'navigation'
 
   it 'renders container' do

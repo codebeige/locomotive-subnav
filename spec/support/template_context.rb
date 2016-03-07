@@ -1,15 +1,16 @@
 RSpec.shared_context 'render template', type: :template do
-  def page_double(attrs)
-    double 'Page', {title: 'Example Page',
+  def page_double(attrs = {})
+    double 'Page', {_id: '123',
+                    title: 'Example Page',
                     published?: true,
                     listed?: true,
                     templatized?: false,
-                    depth: 0}.merge(attrs)
+                    position: 99,
+                    depth: 0,
+                    parent_ids: []}.merge(attrs)
   end
 
-  let(:page_repository) do
-    instance_double Locomotive::Steam::PageRepository, ancestors_of: [page]
-  end
+  let(:page_repository) { instance_double Locomotive::Steam::PageRepository }
   let(:repositories) { double 'Repositories', page: page_repository }
   let(:url_builder) do
     instance_double Locomotive::Steam::UrlBuilderService, url_for: '/foo/bar'

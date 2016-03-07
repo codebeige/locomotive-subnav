@@ -22,8 +22,17 @@ module Locomotive
 
           protected
 
-          def indent(markup)
-            %(\n#{markup.gsub(/^/, '  ')}\n)
+          def indent(markup, drop_leading_line_break = false)
+            unless markup.nil?
+              indented = %(#{markup.gsub(/^/, '  ')}\n)
+              if drop_leading_line_break
+                indented
+              else
+                %(\n#{indented})
+              end
+            else
+              ''
+            end
           end
 
           def container(name)
@@ -35,7 +44,12 @@ module Locomotive
           end
 
           def item(label, path)
-            %(<li><a href="#{path}">#{label}</a></li>)
+            link = %(<a href="#{path}">#{label}</a>)
+            if block_given?
+              %(<li>#{indent link}#{indent yield, true}</li>)
+            else
+              %(<li>#{link}</li>)
+            end
           end
 
           def display?(page)
@@ -45,9 +59,9 @@ module Locomotive
             !page.templatized?
           end
 
-          def render_item(page, context)
+          def render_item(page, context, &block)
             attrs = page_attributes(page, context)
-            item attrs[:title], attrs[:path]
+            item attrs[:title], attrs[:path], &block
           end
 
           def page_attributes(page, context)
