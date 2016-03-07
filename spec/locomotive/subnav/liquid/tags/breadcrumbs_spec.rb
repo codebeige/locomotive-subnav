@@ -31,7 +31,7 @@ describe '{% breadcrumbs %}', type: :template do
     end
   end
 
-  describe 'with level option' do
+  describe 'with level option given' do
     let(:source) { '{% breadcrumbs level: 1 %}' }
 
     it 'renders ancestor trail up to given level only' do

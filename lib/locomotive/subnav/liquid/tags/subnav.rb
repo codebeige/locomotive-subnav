@@ -37,7 +37,7 @@ module Locomotive
 
           def current_branch(page, context)
             page_repository = context.registers[:services].repositories.page
-            pages = page_repository.ancestors_with_children(page)
+            pages = page_repository.ancestors_with_children(page, level)
             pages.select { |p| display? p }.group_by(&:depth).values
           end
         end
