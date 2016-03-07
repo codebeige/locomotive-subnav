@@ -43,13 +43,17 @@ module Locomotive
             %(<ul>#{indent yield}</ul>)
           end
 
-          def item(label, path)
+          def item(name = nil, label, path)
+            markup = ''
+            markup << if name then %(<li class="#{name}">) else '<li>' end
             link = %(<a href="#{path}">#{label}</a>)
             if block_given?
-              %(<li>#{indent link}#{indent yield, true}</li>)
+              markup << indent(link)
+              markup << indent(yield, true)
             else
-              %(<li>#{link}</li>)
+              markup << link
             end
+            markup << '</li>'
           end
 
           def display?(page)
@@ -57,11 +61,6 @@ module Locomotive
             page.published? &&
             page.listed? &&
             !page.templatized?
-          end
-
-          def render_item(page, context, &block)
-            attrs = page_attributes(page, context)
-            item attrs[:title], attrs[:path], &block
           end
 
           def page_attributes(page, context)

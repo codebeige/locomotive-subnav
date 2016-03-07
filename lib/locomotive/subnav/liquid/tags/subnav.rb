@@ -9,7 +9,8 @@ module Locomotive
             current_page = context.registers[:page]
             container 'subnav' do
               levels = current_branch(current_page, context)
-              render_levels(levels, current_page.parent_ids, context)
+              selection = current_page.parent_ids.push + [current_page._id]
+              render_levels(levels, selection, context)
             end
           end
 
@@ -21,10 +22,13 @@ module Locomotive
             rest = levels.drop(1)
             list do
               current_level.map do |page|
-                render_item(page, context) do
-                  if selection.include? page._id
-                    render_levels(rest, selection, context)
+                attrs = page_attributes(page, context)
+                if selection.include? page._id
+                  item 'selected', attrs[:title], attrs[:path] do
+                    render_levels rest, selection, context
                   end
+                else
+                  item attrs[:title], attrs[:path]
                 end
               end.join "\n"
             end

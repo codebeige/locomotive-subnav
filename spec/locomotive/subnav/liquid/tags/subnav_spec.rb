@@ -40,7 +40,26 @@ describe '{% subnav %}', type: :template do
     end
   end
 
-  # TODO: it 'marks selected items'
+  it 'marks selected items' do
+    parent = page_double _id: '3', title: 'We are here', depth: 0
+    allow(page).to receive(:depth) { 1 }
+    allow(page).to receive(:parent_ids) { ['3'] }
+    allow(page_repository).to receive(:ancestors_with_children).with(page) do
+      [parent, page]
+    end
+    render
+    expect(rendered).to have_tag('li.selected', text: 'We are here')
+  end
+
+  it 'marks current page as being selected' do
+    allow(page).to receive(:title) { 'Wild Cherry' }
+    allow(page_repository).to receive(:ancestors_with_children).with(page) do
+      [page]
+    end
+    render
+    expect(rendered).to have_tag('li.selected', text: 'Wild Cherry')
+  end
+
   # TODO: it 'renders nested level inside selected item'
   # TODO: it 'marks current level'
   # TODO: it 'renders ancestor trail up to given level only'

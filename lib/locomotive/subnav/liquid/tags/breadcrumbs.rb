@@ -10,7 +10,8 @@ module Locomotive
             container 'breadcrumbs' do
               list do
                 ancestors_and_self(current_page, context).map do |page|
-                  render_item page, context
+                  attrs = page_attributes(page, context)
+                  item attrs[:title], attrs[:path]
                 end.join "\n"
               end
             end
