@@ -40,6 +40,21 @@ describe '{% subnav %}', type: :template do
     end
   end
 
+  it 'renders nested level inside selected item' do
+    selected_parent = page_double _id: '5', depth: 0, title: 'Cherries'
+    allow(page).to receive(:depth) { 1 }
+    allow(page).to receive(:parent_ids) { ['5'] }
+    allow(page).to receive(:title) { 'Wild Cherry' }
+    allow(page_repository).to receive(:ancestors_with_children).with(page) do
+      [selected_parent, page]
+    end
+    render
+    expect(rendered).to have_tag('li') do
+      with_tag('a', text: 'Cherries')
+      with_tag('ul li', text: 'Wild Cherry')
+    end
+  end
+
   it 'marks selected items' do
     parent = page_double _id: '3', title: 'We are here', depth: 0
     allow(page).to receive(:depth) { 1 }
@@ -60,7 +75,20 @@ describe '{% subnav %}', type: :template do
     expect(rendered).to have_tag('li.selected', text: 'Wild Cherry')
   end
 
-  # TODO: it 'renders nested level inside selected item'
+  it 'renders nested level inside selected item' do
+    selected_parent = page_double _id: '5', depth: 0
+    allow(page).to receive(:depth) { 1 }
+    allow(page).to receive(:parent_ids) { ['5'] }
+    allow(page).to receive(:title) { 'Wild Cherry' }
+    allow(page_repository).to receive(:ancestors_with_children).with(page) do
+      [selected_parent, page]
+    end
+    render
+    expect(rendered).to have_tag('li.selected') do
+      with_tag('ul li', text: 'Wild Cherry')
+    end
+  end
+
   # TODO: it 'marks current level'
   # TODO: it 'renders ancestor trail up to given level only'
 end
