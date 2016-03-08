@@ -18,11 +18,11 @@ describe '{% breadcrumbs %}', type: :template do
     let(:source) { '{% breadcrumbs %}' }
 
     it 'renders full ancestor trail' do
+      root   = page_double title: 'Index'
+      parent = page_double title: 'Cherries'
       allow(page).to receive(:title) { 'Wild Cherry' }
-      parent = page_double(title: 'Cherries')
-      parent_of_parent = page_double(title: 'Index')
       allow(page_repository).to receive(:ancestors_of).with(page) do
-        [parent_of_parent, parent, page]
+        [root, parent, page]
       end
       render
       expect(rendered).to have_tag('ol') do
@@ -35,11 +35,11 @@ describe '{% breadcrumbs %}', type: :template do
     let(:source) { '{% breadcrumbs level: 1 %}' }
 
     it 'renders ancestor trail up to given level only' do
+      root   = page_double depth: 0, title: 'Index'
+      parent = page_double depth: 1, title: 'Cherries'
       allow(page).to receive(:depth) { 2 }
-      top_level = page_double(title: 'Top Level', depth: 1)
-      root = page_double(title: 'Index', depth: 0)
       allow(page_repository).to receive(:ancestors_of).with(page) do
-        [root, top_level, page]
+        [root, parent, page]
       end
       render
       expect(rendered).to have_tag('ol') do
