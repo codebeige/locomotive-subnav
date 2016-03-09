@@ -59,5 +59,10 @@ describe Locomotive::Steam::PageRepository, type: :repository do
       result = repository.ancestors_with_children(page)
       expect(ids result).not_to include('1.1', '1.2', '2.1', '3.1.1')
     end
+
+    it 'fetches ancestors up to given level only' do
+      result = repository.ancestors_with_children(page, 1)
+      expect(ids result).not_to include('0')
+    end
   end
 end
