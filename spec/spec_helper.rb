@@ -11,3 +11,4 @@ RSpec.configure do |config|
 end
 
 require_relative 'support/template_context'
+require_relative 'support/repository_context'
