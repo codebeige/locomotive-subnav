@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Tibor Claassen"]
   spec.email         = ["tibor@gmah.net"]
 
-  spec.summary       = %q{Navigate current branch}
-  spec.description   = %q(Provides a Liquid tag for rendering a navigation of
-                          the current branch of a LocomotiveCMS site.
+  spec.summary       = %q{Navigate current section}
+  spec.description   = %q(Provides Liquid tags for rendering breadcrumbs and
+                          subnavigation of a LocomotiveCMS site.
                        ).gsub(/^\s*/, '')
   spec.homepage      = "https://github.com/codebeige/locomotive-subnav"
   spec.license       = "MIT"
