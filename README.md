@@ -4,6 +4,8 @@ Provide your LocomotiveCMS site with a context aware set of nested navigation
 links that represent the currently selected branch of the page. Typical use
 cases are a subnavigation inside a sidebar or breadcrumbs.
 
+[![Gem Version](https://badge.fury.io/rb/locomotive-subnav.svg)](https://badge.fury.io/rb/locomotive-subnav)
+
 ## Installation
 
 Add a dependency to the Gemfile of *both* your Wagon site and the Locomotive
