@@ -14,6 +14,10 @@ module Locomotive
             end
           end
 
+          def collapsed_levels
+            @_collapsed_levels ||= [*@attributes[:collapse]].map(&:to_i)
+          end
+
           protected
 
           def render_levels(levels, selection, context)
@@ -28,10 +32,10 @@ module Locomotive
                   item 'selected', attrs[:title], attrs[:path] do
                     render_levels rest, selection, context
                   end
-                else
-                  item attrs[:title], attrs[:path]
+                elsif !collapsed_levels.include? page.depth
+                  item(attrs[:title], attrs[:path])
                 end
-              end.join "\n"
+              end.compact.join "\n"
             end
           end
 

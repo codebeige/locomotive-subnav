@@ -27,9 +27,9 @@ For a simple breadcrumb trail use the `breadcrumbs` tag.
 
 ##### Options
 
-| Name    | Type    | Description                               | Default |
-| ---     | ---     | ---                                       | ---     |
-| `level` | Integer | Show ancestors including specified level. | `0`     |
+| Name    | Type      | Description                               | Default |
+| ---     | ---       | ---                                       | ---     |
+| `level` | `Integer` | Show ancestors including specified level. | `0`     |
 
 ##### Example
 
@@ -48,14 +48,15 @@ the `subnav` tag.
 
 ##### Options
 
-| Name    | Type    | Description                               | Default |
-| ---     | ---     | ---                                       | ---     |
-| `level` | Integer | Show ancestors including specified level. | `0`     |
+| Name       | Type                               | Description                                    | Default |
+| ---        | ---                                | ---                                            | ---     |
+| `level`    | `Integer`                          | Show ancestor trail including specified level. | `0`     |
+| `collapse` | `Integer` or `Array` of `Integer`s | Only show selected item on given level(s).     | `[]`    |
 
 ##### Example
 
 ```liquid
-{% subnav level: 1 %}
+{% subnav level: 1, collapse: 1 %}
 ```
 
 ## Development

@@ -90,7 +90,7 @@ describe '{% subnav %}', type: :template do
     end
   end
 
-  describe 'with level option given' do
+  describe 'with level constraint' do
     let(:source) { '{% subnav level: 1 %}' }
 
     it 'renders ancestor trail up to given level only' do
@@ -98,6 +98,41 @@ describe '{% subnav %}', type: :template do
         page, 1
       )
       render
+    end
+  end
+
+  describe 'with collapsed level' do
+    let(:source) { '{% subnav collapse: 1 %}' }
+
+    it 'does not render siblings on a collapsed level' do
+      sibling = page_double depth: 1, title: 'Apples'
+      allow(page).to receive(:depth) { 1 }
+      allow(page_repository).to receive(:ancestors_with_children) do
+        [sibling, page]
+      end
+      render
+      expect(rendered).not_to have_tag('li', text: 'Apples')
+    end
+
+    it 'renders selected item on a collapsed level' do
+      sibling = page_double depth: 1, title: 'Apples'
+      allow(page).to receive_messages(depth: 1,
+                                     title: 'Cherry')
+      allow(page_repository).to receive(:ancestors_with_children) do
+        [sibling, page]
+      end
+      render
+      expect(rendered).to have_tag('li', text: 'Cherry')
+    end
+
+    it 'keeps other levels unchanged' do
+      sibling = page_double depth: 2, title: 'Hill Cherry'
+      allow(page).to receive(:depth) { 2 }
+      allow(page_repository).to receive(:ancestors_with_children) do
+        [sibling, page]
+      end
+      render
+      expect(rendered).to have_tag('li', text: 'Hill Cherry')
     end
   end
 end

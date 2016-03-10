@@ -1,6 +1,10 @@
 RSpec.shared_context 'render template', type: :template do
+  def next_id
+    (@_next_id ||= 1000).tap { |id| @_next_id = id + 1 }.to_s
+  end
+
   def page_double(attrs = {})
-    double 'Page', {_id: '123',
+    double 'Page', {_id: attrs.delete(:_id) || next_id,
                     title: 'Example Page',
                     published?: true,
                     listed?: true,
