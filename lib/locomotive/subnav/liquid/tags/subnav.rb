@@ -22,13 +22,13 @@ module Locomotive
 
           def render_levels(levels, selection, context)
             return if levels.empty?
-            current_level = levels.first
+            level = levels.first
             rest = levels.drop(1)
-            name = 'current' if rest.empty?
+            name = 'current' if current_level?(level, selection)
             list(name) do
-              current_level.map do |page|
+              level.map do |page|
                 attrs = page_attributes(page, context)
-                if selection.include? page._id
+                if selected?(page, selection)
                   item 'selected', attrs[:title], attrs[:path] do
                     render_levels rest, selection, context
                   end
@@ -43,6 +43,16 @@ module Locomotive
             page_repository = context.registers[:services].repositories.page
             pages = page_repository.ancestors_with_children(page, level)
             pages.select { |p| display? p }.group_by(&:depth).values
+          end
+
+          private
+
+          def current_level?(level, selection)
+            level.map(&:_id).include? selection.last
+          end
+
+          def selected?(page, selection)
+            selection.include? page._id
           end
         end
       end

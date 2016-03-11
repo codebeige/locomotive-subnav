@@ -72,9 +72,23 @@ describe '{% subnav %}', type: :template do
     expect(rendered).to have_tag('li.selected', text: 'Wild Cherry')
   end
 
+  it 'renders children of current page' do
+    parent = page_double _id: '1', depth: 0, parent_ids: []
+    allow(page).to receive_messages(_id: '2', depth: 2, parent_ids: ['1'])
+    child = page_double _id: '3', depth: 3, parent_ids: ['2'], title: 'Child'
+    allow(page_repository).to receive(:ancestors_with_children) do
+      [parent, page, child]
+    end
+    render
+    expect(rendered).to have_tag('li', text: 'Child')
+  end
+
   it 'marks current level' do
-    allow(page).to receive(:title) { 'Current Level' }
-    allow(page_repository).to receive(:ancestors_with_children) { [page] }
+    allow(page).to receive_messages(_id: '2', depth: 2, title: 'Current Level')
+    child = page_double _id: '3', depth: 3, parent_ids: ['2'], title: 'Child'
+    allow(page_repository).to receive(:ancestors_with_children) do
+      [page, child]
+    end
     render
     expect(rendered).to have_tag('ul.current', text: 'Current Level')
   end
